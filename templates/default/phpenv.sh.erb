@@ -1,0 +1,16 @@
+export PHPENV_ROOT=<%= @phpenv_root %>
+export PATH=<%= "#{@phpenv_root}/bin:#{@phpenv_root}/shims:#{@phpenv_root}/plugins/php-build/bin:$PATH" %>
+
+case $SHELL in
+  */zsh)
+    source $PHPENV_ROOT/completions/phpenv.zsh
+    ;;
+  */bash)
+    source $PHPENV_ROOT/completions/phpenv.bash
+    ;;
+  *)
+    source $PHPENV_ROOT/completions/phpenv.bash
+    ;;
+esac
+
+eval "$(phpenv init -)"

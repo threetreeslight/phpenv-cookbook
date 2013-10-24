@@ -1,10 +1,14 @@
+default[:phpenv][:user]           = "phpenv"
+default[:phpenv][:group]          = "phpenv"
+default[:phpenv][:manage_home]    = true
+default[:phpenv][:group_users]    = Array.new
+default[:phpenv][:git_repository] = 'git://github.com/phpenv/phpenv.git'
+default[:phpenv][:git_revision]   = "dev"
+default[:phpenv][:install_prefix] = "/opt"
+default[:phpenv][:root_path]      = "#{node[:phpenv][:install_prefix]}/phpenv"
 
-default[:rbenv][:user]           = "rbenv"
-default[:rbenv][:group]          = "rbenv"
-default[:rbenv][:manage_home]    = true
-default[:rbenv][:group_users]    = Array.new
-default[:rbenv][:git_repository] = "git://github.com/sstephenson/rbenv.git"
-default[:rbenv][:git_revision]   = "master"
-default[:rbenv][:install_prefix] = "/opt"
-default[:rbenv][:root_path]      = "#{node[:rbenv][:install_prefix]}/rbenv"
+
+default[:php_src][:root_path]      = "#{node[:phpenv][:install_prefix]}/phpenv/php-src"
+default[:php_src][:git_repository] = 'git://github.com/php/php-src.git'
+default[:php_src][:git_revision]   = "master"
 
