@@ -1,5 +1,5 @@
 export PHPENV_ROOT=<%= @phpenv_root %>
-export PATH=<%= "#{@phpenv_root}/bin:#{@phpenv_root}/shims:#{@phpenv_root}/plugins/php-build/bin:$PATH" %>
+export PATH=<%= "#{@phpenv_root}/bin:#{@phpenv_root}/shims:#{@phpenv_root}/php-src:$PATH" %>
 
 case $SHELL in
   */zsh)

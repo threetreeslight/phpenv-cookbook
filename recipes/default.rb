@@ -1,26 +1,40 @@
 #
-# Cookbook Name:: -cookbook
+# Cookbook Name:: phpenv
 # Recipe:: default
 #
-# Copyright 2013, YOUR_COMPANY_NAME
-#
-# All rights reserved - Do Not Redistribute
+# Copyright 2013, ThreeTreesLight
+# Author::  Akira Miki (@ae06710)
 #
 
 # node.set[:phpenv][:root] = phpenv_root_path
 node.set[:phpenv][:root] = node[:phpenv][:root_path]
 
 include_recipe "build-essential"
-include_recipe "git"
-package "curl"
+# include_recipe "git"
 
-# case node[:platform]
-# when "redhat", "centos", "amazon", "oracle"
-#   # TODO: add as per "rvm requirements"
-#   package "openssl-devel"
-#   package "zlib-devel"
-#   package "readline-devel"
-# end
+## packages
+#
+# to phpenv
+%w{ curl patch }.each do |pkg|
+  package pkg
+end
+
+# to php
+pkgs = value_for_platform_family(
+  ["rhel", "fedora"] => %w{ bzip2-devel libc-client-devel curl-devel 
+                            freetype-devel gmp-devel libjpeg-devel krb5-devel 
+                            libmcrypt-devel libpng-devel openssl-devel t1lib-devel 
+                            mhash-devel 
+                            autoconf213 re2c libxml2-devel readline-devel libxslt-devel },
+  [ "debian", "ubuntu" ] => %w{ libbz2-dev libc-client2007e-dev libcurl4-gnutls-dev libfreetype6-dev libgmp3-dev libjpeg62-dev libkrb5-dev libmcrypt-dev libpng12-dev libssl-dev libt1-dev },
+  "default" => %w{ libbz2-dev libc-client2007e-dev libcurl4-gnutls-dev libfreetype6-dev libgmp3-dev libjpeg62-dev libkrb5-dev libmcrypt-dev libpng12-dev libssl-dev libt1-dev }
+  )
+
+pkgs.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
 
 ## user/group
 #
@@ -78,7 +92,6 @@ git node[:php_src][:root_path] do
   group node[:phpenv][:group]
   action :sync
 end
-
 
 %w{ shims versions plugins }.each do |dir_name|
   directory "#{node[:phpenv][:root]}/#{dir_name}" do

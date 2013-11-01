@@ -12,3 +12,7 @@ default[:php_src][:root_path]      = "#{node[:phpenv][:install_prefix]}/phpenv/p
 default[:php_src][:git_repository] = 'git://github.com/php/php-src.git'
 default[:php_src][:git_revision]   = "master"
 
+
+default[:perl][:language] = "ja_JP.UTF-8"
+default[:perl][:lc_ctype] = "UTF-8"
+

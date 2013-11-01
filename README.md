@@ -17,7 +17,6 @@ Attributes
 ----------
 TODO: List you cookbook attributes here.
 
-e.g.
 #### phpenv-cookbook::default
 <table>
   <tr>
