@@ -1,46 +1,25 @@
 #
 # Cookbook Name:: phpenv
-# Recipe:: 5_3_27
+# Recipe:: 5_5_5
 #
 # author : ae06710 / ThreeTreesLight
 #
 
-node.set[:phpenv][:version] = 'php-5.5.5'
+node.set[:phpenv][:version] = '5.5.5'
 
-include_recipe 'phpenv::module_curl'
-include_recipe 'phpenv::module_apc'
-include_recipe 'phpenv::module_memcache'
-include_recipe 'phpenv::module_mysql'
-
-# after into module_apc
-bash 'symlink apxs from sbin to bin' do
-  user 'root'
-  group 'root'
-  code <<-EOC
-    ln -s /usr/sbin/apxs /usr/bin/apxs2
-  EOC
-  creates "/usr/bin/apxs2"
+template "#{node[:phpenv][:root]}/etc/php-5.5.Linux.source" do
+  source "php-5.5.Linux.source.erb"
+  mode "0644"
 end
 
-# symlink config0.m4 to config.m4 for pear-nozlib
-bash 'copy config0.m4' do
-  cwd '/opt/phpenv/php-src/ext/zlib'
-  user 'phpenv'
-  group 'phpenv'
-  code <<-EOC
-    ln -s config0.m4 config.m4
-  EOC
-  creates "config.m4"
-end
-
-
-
-bash "install #{node[:phpenv][:version]}" do
+bash "install php #{node[:phpenv][:version]}" do
   user node[:phpenv][:user]
   group node[:phpenv][:group]
   code <<-EOC
-    phpenv install #{node[:phpenv][:version]}
+    phpenv install php-#{node[:phpenv][:version]}
   EOC
+  creates "#{node[:phpenv][:root]}/versions/#{node[:phpenv][:version]}"
+  notifies :run, "bash[chown_php-src]"
 end
 
 

@@ -10,30 +10,13 @@
 node.set[:phpenv][:root] = node[:phpenv][:root_path]
 
 include_recipe "build-essential"
+# require git > 1.8
 # include_recipe "git"
 
 ## packages
 #
-# to phpenv
 %w{ curl patch }.each do |pkg|
   package pkg
-end
-
-# to php
-pkgs = value_for_platform_family(
-  ["rhel", "fedora"] => %w{ bzip2-devel libc-client-devel curl-devel 
-                            freetype-devel gmp-devel libjpeg-devel krb5-devel 
-                            libmcrypt-devel libpng-devel openssl-devel t1lib-devel 
-                            mhash-devel 
-                            autoconf213 re2c libxml2-devel readline-devel libxslt-devel },
-  [ "debian", "ubuntu" ] => %w{ libbz2-dev libc-client2007e-dev libcurl4-gnutls-dev libfreetype6-dev libgmp3-dev libjpeg62-dev libkrb5-dev libmcrypt-dev libpng12-dev libssl-dev libt1-dev },
-  "default" => %w{ libbz2-dev libc-client2007e-dev libcurl4-gnutls-dev libfreetype6-dev libgmp3-dev libjpeg62-dev libkrb5-dev libmcrypt-dev libpng12-dev libssl-dev libt1-dev }
-  )
-
-pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
 end
 
 ## user/group
@@ -61,6 +44,7 @@ git node[:phpenv][:root] do
   reference node[:phpenv][:git_revision]
   user node[:phpenv][:user]
   group node[:phpenv][:group]
+  enable_submodules true
   action :sync
 
   notifies :create, "template[/etc/profile.d/phpenv.sh]", :immediately
@@ -101,3 +85,4 @@ end
     action :create
   end
 end
+

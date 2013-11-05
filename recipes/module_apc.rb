@@ -35,3 +35,15 @@ when "debian"
     action :install
   end
 end
+
+bash 'symlink apxs from sbin to bin' do
+  only_if "which apxs"
+  user 'root'
+  group 'root'
+  code <<-EOC
+    ln -s /usr/sbin/apxs /usr/bin/apxs2
+  EOC
+  creates "/usr/bin/apxs2"
+end
+
+
